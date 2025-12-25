@@ -1,0 +1,273 @@
+From a91ffb8c4fe71b4e363092088afdfd501029f912 Mon Sep 17 00:00:00 2001
+From: Sabri Ünal <yakushabb@gmail.com>
+Date: Fri, 26 Dec 2025 01:55:14 +0300
+Subject: [PATCH] Fix app ID issues
+
+---
+ README.md                                                                                   |  2 +-
+ data/colormate.gresource.xml                                                                |  2 +-
+ data/{com.github.ckruse.ColorMate.appdata.xml.in => de.wwwtech.ColorMate.appdata.xml.in} | 50 +++++++++++++++++---------------------------------
+ data/{com.github.ckruse.ColorMate.desktop.in => de.wwwtech.ColorMate.desktop.in}         |  4 ++--
+ data/{com.github.ckruse.ColorMate.gschema.xml => de.wwwtech.ColorMate.gschema.xml}       |  2 +-
+ data/icons/{com.github.ckruse.ColorMate.svg => de.wwwtech.ColorMate.svg}           |  0
+ data/meson.build                                                                            | 10 +++++-----
+ com.github.ckruse.ColorMate.json => de.wwwtech.ColorMate.json                               |  2 +-
+ meson.build                                                                                 |  2 +-
+ po/POTFILES                                                                                 |  6 +++---
+ src/Application.vala                                                                        |  2 +-
+ src/Window.vala                                                                             |  4 ++--
+ 12 files changed, 35 insertions(+), 51 deletions(-)
+
+diff --git a/README.md b/README.md
+index e146856..c2834a2 100644
+--- a/README.md
++++ b/README.md
+@@ -47,7 +47,7 @@ sudo ninja install
+ Then run it with:
+ 
+ ```shell
+-com.github.ckruse.ColorMate
++de.wwwtech.ColorMate
+ ```
+ 
+ Since ColorMate is flatpack ready you alternatively can install [GNOME Builder](https://wiki.gnome.org/Apps/Builder),
+diff --git a/data/colormate.gresource.xml b/data/colormate.gresource.xml
+index 0454c6b..a5597b3 100644
+--- a/data/colormate.gresource.xml
++++ b/data/colormate.gresource.xml
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <gresources>
+-  <gresource prefix="/com/github/ckruse/ColorMate">
++  <gresource prefix="/de/wwwtech/ColorMate">
+     <file>ui/window.ui</file>
+   </gresource>
+ </gresources>
+diff --git a/data/com.github.ckruse.ColorMate.appdata.xml.in b/data/de.wwwtech.ColorMate.appdata.xml.in
+similarity index 53%
+rename from data/com.github.ckruse.ColorMate.appdata.xml.in
+rename to data/de.wwwtech.ColorMate.appdata.xml.in
+index 9fd8792..7f4c6e4 100644
+--- a/data/com.github.ckruse.ColorMate.appdata.xml.in
++++ b/data/de.wwwtech.ColorMate.appdata.xml.in
+@@ -1,57 +1,41 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<component type="desktop">
+-	<id>com.github.ckruse.ColorMate.desktop</id>
++<component type="desktop-application">
++	<id>de.wwwtech.ColorMate</id>
+ 	<metadata_license>CC0-1.0</metadata_license>
+ 	<project_license>GPL-3.0-or-later</project_license>
+   <name>ColorMate</name>
+   <summary>Your friendly color helper</summary>
+ 	<description>
+     <p>A color helper for web developers. Enter a color in <code>#RGB</code>, <code>rgb()</code> or <code>hsl()</code>
+         and the corresponding representations with a handy copy button.</p>
+ 	</description>
+-  <launchable type="desktop-id">com.github.ckruse.ColorMate.desktop</launchable>
++  <launchable type="desktop-id">de.wwwtech.ColorMate.desktop</launchable>
+   <provides>
+-    <binary>com.github.ckruse.ColorMate</binary>
++    <binary>de.wwwtech.ColorMate</binary>
++    <id>de.wwwtech.ColorMate.desktop</id>
+   </provides>
+-  <content_rating type="oars-1.1">
+-    <content_attribute id="violence-cartoon">none</content_attribute>
+-    <content_attribute id="violence-fantasy">none</content_attribute>
+-    <content_attribute id="violence-realistic">none</content_attribute>
+-    <content_attribute id="violence-bloodshed">none</content_attribute>
+-    <content_attribute id="violence-sexual">none</content_attribute>
+-    <content_attribute id="violence-desecration">none</content_attribute>
+-    <content_attribute id="violence-slavery">none</content_attribute>
+-    <content_attribute id="violence-worship">none</content_attribute>
+-    <content_attribute id="drugs-alcohol">none</content_attribute>
+-    <content_attribute id="drugs-narcotics">none</content_attribute>
+-    <content_attribute id="drugs-tobacco">none</content_attribute>
+-    <content_attribute id="sex-nudity">none</content_attribute>
+-    <content_attribute id="sex-themes">none</content_attribute>
+-    <content_attribute id="sex-homosexuality">none</content_attribute>
+-    <content_attribute id="sex-prostitution">none</content_attribute>
+-    <content_attribute id="sex-adultery">none</content_attribute>
+-    <content_attribute id="sex-appearance">none</content_attribute>
+-    <content_attribute id="language-profanity">none</content_attribute>
+-    <content_attribute id="language-humor">none</content_attribute>
+-    <content_attribute id="language-discrimination">none</content_attribute>
+-    <content_attribute id="social-chat">none</content_attribute>
+-    <content_attribute id="social-info">none</content_attribute>
+-    <content_attribute id="social-audio">none</content_attribute>
+-    <content_attribute id="social-location">none</content_attribute>
+-    <content_attribute id="social-contacts">none</content_attribute>
+-    <content_attribute id="money-purchasing">none</content_attribute>
+-    <content_attribute id="money-gambling">none</content_attribute>
+-  </content_rating>
++  <replaces>
++    <id>de.wwwtech.ColorMate.desktop</id>
++  </replaces>
++  <content_rating type="oars-1.1"/>
+   <developer_name>Christian Kruse</developer_name>
+   <url type="homepage">https://github.com/ckruse/ColorMate</url>
+   <url type="bugtracker">https://github.com/ckruse/ColorMate/issues</url>
++  <url type="vcs-browser">https://github.com/ckruse/ColorMate</url>
+   <url type="help">https://github.com/ckruse/ColorMate/issues</url>
+   <update_contact>christian_AT_kruse.cool</update_contact>
+    <screenshots>
+     <screenshot type="default">
+       <image>https://raw.githubusercontent.com/ckruse/ColorMate/main/ColorMate.png</image>
+     </screenshot>
+   </screenshots>
++    <releases>
++        <release version="1.0.0" date="2021-09-05">
++            <description>
++                <p>First public release</p>
++            </description>
++        </release>
++    </releases>
+   <custom>
+     <value key="x-appcenter-color-primary">#fff</value>
+     <value key="x-appcenter-color-primary-text">#333</value>
+diff --git a/data/com.github.ckruse.ColorMate.desktop.in b/data/de.wwwtech.ColorMate.desktop.in
+similarity index 75%
+rename from data/com.github.ckruse.ColorMate.desktop.in
+rename to data/de.wwwtech.ColorMate.desktop.in
+index 54b71db..b2214dd 100644
+--- a/data/com.github.ckruse.ColorMate.desktop.in
++++ b/data/de.wwwtech.ColorMate.desktop.in
+@@ -1,8 +1,8 @@
+ [Desktop Entry]
+ Name=colormate
+ Exec=colormate
+-Icon=com.github.ckruse.ColorMate
++Icon=de.wwwtech.ColorMate
+ Terminal=false
+ Type=Application
+-Categories=GTK;
++Categories=GTK;Utility;
+ StartupNotify=true
+diff --git a/data/com.github.ckruse.ColorMate.gschema.xml b/data/de.wwwtech.ColorMate.gschema.xml
+similarity index 96%
+rename from data/com.github.ckruse.ColorMate.gschema.xml
+rename to data/de.wwwtech.ColorMate.gschema.xml
+index 5826abc..c0d3ac0 100644
+--- a/data/com.github.ckruse.ColorMate.gschema.xml
++++ b/data/de.wwwtech.ColorMate.gschema.xml
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <schemalist gettext-domain="colormate">
+-  <schema id="com.github.ckruse.ColorMate" path="/com/github/ckruse/ColorMate/">
++  <schema id="de.wwwtech.ColorMate" path="/de/wwwtech/ColorMate/">
+     <key name="window-width" type="i">
+       <default>400</default>
+       <summary>The saved width of the window.</summary>
+diff --git a/data/icons/com.github.ckruse.ColorMate.svg b/data/icons/de.wwwtech.ColorMate.svg
+similarity index 100%
+rename from data/icons/com.github.ckruse.ColorMate.svg
+rename to data/icons/de.wwwtech.ColorMate.svg
+diff --git a/data/meson.build b/data/meson.build
+index 36ac311..d1366d4 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -1,6 +1,6 @@
+ desktop_file = i18n.merge_file(
+-  input: 'com.github.ckruse.ColorMate.desktop.in',
+-  output: 'com.github.ckruse.ColorMate.desktop',
++  input: 'de.wwwtech.ColorMate.desktop.in',
++  output: 'de.wwwtech.ColorMate.desktop',
+   type: 'desktop',
+   po_dir: '../po',
+   install: true,
+@@ -15,8 +15,8 @@ if desktop_utils.found()
+ endif
+ 
+ appstream_file = i18n.merge_file(
+-  input: 'com.github.ckruse.ColorMate.appdata.xml.in',
+-  output: 'com.github.ckruse.ColorMate.appdata.xml',
++  input: 'de.wwwtech.ColorMate.appdata.xml.in',
++  output: 'de.wwwtech.ColorMate.appdata.xml',
+   po_dir: '../po',
+   install: true,
+   install_dir: join_paths(get_option('datadir'), 'appdata')
+@@ -29,7 +29,7 @@ if appstream_util.found()
+   )
+ endif
+ 
+-install_data('com.github.ckruse.ColorMate.gschema.xml',
++install_data('de.wwwtech.ColorMate.gschema.xml',
+   install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
+ )
+ 
+diff --git a/com.github.ckruse.ColorMate.json b/de.wwwtech.ColorMate.json
+similarity index 97%
+rename from com.github.ckruse.ColorMate.json
+rename to de.wwwtech.ColorMate.json
+index 39d1443..9ba4d21 100644
+--- a/com.github.ckruse.ColorMate.json
++++ b/de.wwwtech.ColorMate.json
+@@ -1,5 +1,5 @@
+ {
+-  "app-id": "com.github.ckruse.ColorMate",
++  "app-id": "de.wwwtech.ColorMate",
+   "runtime": "io.elementary.Platform",
+   "runtime-version": "6",
+   "sdk": "io.elementary.Sdk",
+diff --git a/meson.build b/meson.build
+index 1493df6..b1c63b2 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1,4 +1,4 @@
+-project('com.github.ckruse.ColorMate', ['c', 'vala'],
++project('de.wwwtech.ColorMate', ['c', 'vala'],
+           version: '1.0.0',
+     meson_version: '>= 0.50.0',
+   default_options: [ 'warning_level=2',
+diff --git a/po/POTFILES b/po/POTFILES
+index 29a255d..d65a496 100644
+--- a/po/POTFILES
++++ b/po/POTFILES
+@@ -1,6 +1,6 @@
+-data/com.github.ckruse.ColorMate.desktop.in
+-data/com.github.ckruse.ColorMate.appdata.xml.in
+-data/com.github.ckruse.ColorMate.gschema.xml
++data/de.wwwtech.ColorMate.desktop.in
++data/de.wwwtech.ColorMate.appdata.xml.in
++data/de.wwwtech.ColorMate.gschema.xml
+ src/window.ui
+ src/main.vala
+ src/window.vala
+diff --git a/src/Application.vala b/src/Application.vala
+index 6354358..775d883 100644
+--- a/src/Application.vala
++++ b/src/Application.vala
+@@ -20,7 +20,7 @@ namespace ColorMate {
+   public class Application : Gtk.Application {
+     public Application () {
+       Object (
+-        application_id: "com.github.ckruse.ColorMate",
++        application_id: "de.wwwtech.ColorMate",
+         flags: ApplicationFlags.FLAGS_NONE
+         );
+     }
+diff --git a/src/Window.vala b/src/Window.vala
+index bac0602..db125f1 100644
+--- a/src/Window.vala
++++ b/src/Window.vala
+@@ -29,7 +29,7 @@ struct Hsl {
+ }
+ 
+ namespace ColorMate {
+-  [GtkTemplate (ui = "/com/github/ckruse/ColorMate/ui/window.ui")]
++  [GtkTemplate (ui = "/de/wwwtech/ColorMate/ui/window.ui")]
+   public class Window : Gtk.ApplicationWindow {
+     [GtkChild]
+     unowned Gtk.Label no_rgb_lbl;
+@@ -72,7 +72,7 @@ namespace ColorMate {
+         clipboard.set_text (hsl_lbl.get_text(), -1);
+       });
+ 
+-      settings = new GLib.Settings ("com.github.ckruse.ColorMate");
++      settings = new GLib.Settings ("de.wwwtech.ColorMate");
+ 
+       move (settings.get_int ("window-x"), settings.get_int ("window-y"));
+       resize (settings.get_int ("window-width"), settings.get_int ("window-height"));
+--
+libgit2 1.7.2
+

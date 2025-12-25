@@ -1,31 +1,78 @@
 {
-  "app-id": "de.wwwtech.ColorMate",
-  "runtime": "org.gnome.Platform",
-  "runtime-version": "40",
-  "sdk": "org.gnome.Sdk",
-  "sdk-extensions": ["org.freedesktop.Sdk.Extension.rust-stable"],
-  "command": "colormate",
-  "finish-args": ["--share=ipc", "--socket=fallback-x11", "--socket=wayland"],
-  "build-options": {
-    "append-path": "/usr/lib/sdk/rust-stable/bin",
-    "env": {
-      "CARGO_HOME": "cargo",
-      "RUST_BACKTRACE": "1",
-      "RUST_LOG": "colormate=debug"
-    }
-  },
-  "modules": [
-    {
-      "name": "colormate",
-      "builddir": true,
-      "buildsystem": "meson",
-      "sources": [
+    "app-id": "de.wwwtech.ColorMate",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "25.08",
+    "sdk": "org.freedesktop.Sdk",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.vala"
+    ],
+    "build-options": {
+        "prepend-path": "/usr/lib/sdk/vala/bin/",
+        "prepend-ld-library-path": "/usr/lib/sdk/vala/lib"
+    },
+    "command": "colormate",
+    "finish-args": [
+        "--share=ipc",
+        "--socket=fallback-x11",
+        "--socket=wayland"
+    ],
+    "cleanup": [
+        "/bin/granite-demo",
+        "/include",
+        "/lib/girepository-1.0",
+        "/lib/pkgconfig",
+        "/man",
+        "/share/doc",
+        "/share/gir-1.0",
+        "/share/gtk-doc",
+        "/share/man",
+        "/share/pkgconfig",
+        "/share/vala",
+        "*.la",
+        "*.a"
+    ],
+    "modules": [
         {
-          "type": "archive",
-          "url": "https://github.com/ckruse/ColorMate/releases/download/0.1.4/colormate-0.1.4.tar.xz",
-          "sha256": "0f2b01cce036b6a13dc734f2ed6825543f4d82fcf6a72e5d96d45e27914baa8f"
+            "name": "libgee",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/libgee/0.20/libgee-0.20.8.tar.xz",
+                    "sha256": "189815ac143d89867193b0c52b7dc31f3aa108a15f04d6b5dca2b6adfad0b0ee"
+                }
+            ]
+        },
+        {
+            "name": "granite",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/elementary/granite.git",
+                    "tag": "6.2.0"
+                }
+            ]
+        },
+        {
+            "name": "colormate",
+            "builddir": true,
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/ckruse/ColorMate/archive/refs/tags/1.0.0.tar.gz",
+                    "sha256": "0cae31a2dc817cea2a63042ae21b33c3c1059b4c97514497a28c0eab55222921"
+                },
+                {
+                    "type": "patch",
+                    "path": "fix-appid.patch"
+                }
+            ],
+            "post-install": [
+                "mkdir -p /app/share/icons/hicolor/scalable/apps",
+                "mv /app/share/icons/hicolor/128x128/apps/${FLATPAK_ID}.svg /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg",
+                "find /app/share/icons/hicolor -type f -not -path \"*scalable*\" -not -path \"*actions*\" -name \"*.svg\" -delete"
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }
